@@ -9,6 +9,7 @@
 #include <regex>
 #include <set>
 #include <math.h>
+#include <chrono>
 
 using namespace std;
 
@@ -23,12 +24,19 @@ typedef pair<double, string> coord_distance;
 
 std::vector<double> split(const string& input, const string& regex, string &label) {
     // passing -1 as the submatch index parameter performs splitting
-    std::regex re(regex);
-    std::sregex_token_iterator
-            first{input.begin(), input.end(), re, -1},
-    last;
-    vector<string> ret = {first, last};
+//    std::regex re(regex);
+//    std::sregex_token_iterator
+//            first{input.begin(), input.end(), re, -1},
+//    last;
+//    vector<string> ret = {first, last};
     vector<double> ret_double;
+    std::istringstream ss(input);
+    std::string token;
+
+    vector<string> ret;
+    while(std::getline(ss, token, regex[0])) {
+        ret.push_back(token);
+    }
     label = ret[0];
     ret.erase(ret.begin());
     for(auto n:ret){
@@ -49,6 +57,24 @@ public:
     double operator()(double& left, double& right)
     {
         return left<right ? left : right;
+    }
+};
+
+class AverageLinkage: public LinkageOperation
+{
+public:
+    double operator()(double& left, double& right)
+    {
+        return (left+right)/2;
+    }
+};
+
+class CompleteLinkage: public LinkageOperation
+{
+public:
+    double operator()(double& left, double& right)
+    {
+        return left<right ? right : left;
     }
 };
 
@@ -154,7 +180,8 @@ public:
     }
 
     void make_clustering(int k, LinkageOperation* operation){
-        for(int i=0;i<=k;i++){
+        //vector<string> clusters;
+        while(matrix.size() > k){
             string first_target = minimum_position.first;
             string second_target = minimum_position.second;
             string final_target = first_target + "-" + second_target;
@@ -177,6 +204,14 @@ public:
             }
             matrix[final_target][final_target] = 0;
             update_minimum();
+        }
+        int i=1;
+        for (auto &x : matrix)
+        {
+            cout << "Cluster " << i << ":" << endl;
+            cout << x.first << endl;
+            cout << endl << endl;
+            i++;
         }
     }
 
