@@ -183,13 +183,13 @@ public:
     void disociative_clustering(int k){
         set<coord_distance> minimums = get_minimums_disociative();
         vector<string> clusters;
-        while(clusters.size() < k){
-            if(minimums.size() <= 2){
-                auto first = *minimums.begin();
-                auto last = *--minimums.end();
-                clusters.push_back(first.second + "-" + last.second);
-                break;
-            }
+        while(clusters.size()+1 < k){
+//            if(minimums.size() <= 2){
+//                auto first = *minimums.begin();
+//                auto last = *--minimums.end();
+//                clusters.push_back(first.second + "-" + last.second);
+//                break;
+//            }
             coord_distance major = *--minimums.end();
             minimums.erase(--minimums.end());
             string cluster_name = major.second;
@@ -202,11 +202,18 @@ public:
             }
             clusters.push_back(cluster_name);
         }
-
+        int i=1;
         for(auto &it: clusters){
+            cout << "Cluster " << i << ":" << endl;
             cout << it << endl;
+            i++;
         }
-
+        string final_cluster = "";
+        for(auto &mins: minimums){
+            final_cluster += mins.second;
+        }
+        cout << "Cluster " << i << ":" << endl;
+        cout << final_cluster << endl;
     }
 
 };
