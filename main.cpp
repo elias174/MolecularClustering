@@ -14,9 +14,9 @@ int main()
     //l.print_matrix();
     cout << endl << endl;
 
-    cout << "Simple linkage with 200 clusters" << endl;
+    cout << "Dissociative linkage with 150 clusters" << endl;
     auto started = std::chrono::high_resolution_clock::now();
-    l.make_clustering(200,simple);
+    l.disociative_clustering(150);
     auto done = std::chrono::high_resolution_clock::now();
     cout << endl;
     std::cout << std::chrono::duration_cast<std::chrono::microseconds>(done-started).count() << " microseconds " << endl;

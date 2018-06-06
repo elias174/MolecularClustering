@@ -245,7 +245,7 @@ public:
         }
         string final_cluster = "";
         for(auto &mins: minimums){
-            final_cluster += mins.second;
+            final_cluster += mins.second + "-";
         }
         cout << "Cluster " << i << ":" << endl;
         cout << final_cluster << endl;
